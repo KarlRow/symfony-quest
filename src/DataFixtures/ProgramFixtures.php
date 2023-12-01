@@ -32,6 +32,11 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
                         'synopsis' => 'Il y a un siècle, l\'humanité a presque été exterminée par des titans qui dévorent les hommes. Les survivants sont regroupés dans une ville fortifiée. C\'est alors qu\'un titan colossal, plus haut que les murs de la ville, se présente devant la cité...',
                         'category' => 'Animation',
                         'poster'   => '/build/images/l_attaque_des_titans.jpg',],
+        'Program6' => [
+                        'title'    => 'Arcane',
+                        'synopsis' => 'Il y a un siècle, l\'humanité a presque été exterminée par des titans qui dévorent les hommes. Les survivants sont regroupés dans une ville fortifiée. C\'est alors qu\'un titan colossal, plus haut que les murs de la ville, se présente devant la cité...',
+                        'category' => 'Animation',
+                        'poster'   => '/build/images/arcane.webp',],
     ];
     public function load(ObjectManager $manager)
     {
