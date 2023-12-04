@@ -31,7 +31,7 @@ class Category
         return $this->programs;
     }
 
-    public function addPrograms(Program $program)
+    public function addProgram(Program $program)
     {
         if (!$this->programs->contains($program)) {
             $this->programs->add($program);

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\EpisodeRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EpisodeRepository::class)]
@@ -13,14 +14,17 @@ class Episode
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 100)]
+        #[ORM\Column(length: 255)]
     private ?string $title = null;
 
     #[ORM\Column]
     private ?int $number = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $synopsis = null;
+
+    #[ORM\ManyToOne(inversedBy: 'episodes')]
+    private ?Season $season = null;
 
     public function getId(): ?int
     {
@@ -59,6 +63,17 @@ class Episode
     public function setSynopsis(string $synopsis): static
     {
         $this->synopsis = $synopsis;
+
+        return $this;
+    }
+    public function getSeason(): ?Season
+    {
+        return $this->season;
+    }
+
+    public function setSeason(?Season $season): static
+    {
+        $this->season = $season;
 
         return $this;
     }
