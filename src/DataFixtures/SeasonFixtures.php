@@ -2,44 +2,49 @@
 
 namespace App\DataFixtures;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Persistence\ObjectManager;
 use App\Entity\Season;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+
+//Tout d'abord nous ajoutons la classe Factory de FakerPhp
+use Faker\Factory;
 
 class SeasonFixtures extends Fixture implements DependentFixtureInterface
 {
-    public function load(ObjectManager $manager)
-
+    public function load(ObjectManager $manager): void
     {
-        //src/DataFixtures/SeasonFixtures.php
-        $season = new Season();
-        $season->setNumber(1);
-        $season->setProgram($this->getReference('program_Arcane'));
-        $season->setYear('2021');
-        $season->setDescription('Saison 1');
-        //... set other season's properties
-        $this->addReference('season1_Arcane', $season);
-        $manager->persist($season);
+        //Puis ici nous demandons à la Factory de nous fournir un Faker
+        $faker = Factory::create();
 
-        //src/DataFixtures/SeasonFixtures.php
-        $season = new Season();
-        $season->setNumber(2);
-        $season->setProgram($this->getReference('program_Arcane'));
-        $season->setYear('2021');
-        $season->setDescription('Saison 1');
-        //... set other season's properties
-        $this->setReference('season1_Arcane', $season);
-        $manager->persist($season);
+        /**
+        * L'objet $faker que tu récupère est l'outil qui va te permettre 
+        * de te générer toutes les données que tu souhaites
+        */
+
+        for($i = 0; $i <= 5; $i++) {
+            $season = new Season();
+            //Ce Faker va nous permettre d'alimenter l'instance de Season que l'on souhaite ajouter en base
+            $season->setNumber($i);
+            $season->setProgram($this->getReference('program_Arcane'));
+            $season->setYear('2021');
+            $season->setDescription('Saison 1');
+            //... set other season's properties
+            $this->setReference('season1_Arcane', $season);
+            $manager->persist($season);
+
+
+            $manager->persist($season);
+        }
 
         $manager->flush();
-
     }
-    
-    public function getDependencies()
+
+
+    public function getDependencies(): array
     {
         return [
-          ProgramFixtures::class,
+           ProgramFixtures::class,
         ];
     }
 }
