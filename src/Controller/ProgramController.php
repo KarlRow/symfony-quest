@@ -6,11 +6,14 @@ use App\Entity\Episode;
 use App\Entity\Program;
 use App\Entity\Season;
 
+use App\Form\ProgramType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 use App\Repository\ProgramRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 
 class ProgramController extends AbstractController
@@ -21,6 +24,27 @@ class ProgramController extends AbstractController
         $programs = $programRepository->findAll();
 
         return $this->render('program/index.html.twig', ['programs' => $programs]);
+    }
+
+    #[Route('/program/new', name: 'new')]
+    public function new(Request $request, EntityManagerInterface $entityManager) : Response
+    {
+        $program = new Program();
+        $form = $this->createForm(ProgramType::class, $program);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $entityManager->persist($program);
+            $entityManager->flush();            
+
+            // Redirect to categories list
+            return $this->redirectToRoute('program_index');
+        }
+
+        // Render the form
+        return $this->render('program/new.html.twig', [
+            'form' => $form,
+        ]);
     }
 
     #[Route('/program/show/{id}',  methods: ['GET'], name: 'program_show')]
