@@ -14,15 +14,15 @@ class EpisodeFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager) 
 
     {
-      $fake = Factory::create();
+      $faker = Factory::create();
 
       //src/DataFixtures/EpisodeFixtures.php
-    for($i = 0; $i <= 10; $i++) {
+    for($i = 1; $i <= 10; $i++) {
       $episode = new Episode();
-      $episode->setTitle($fake->text(25));
       $episode->setNumber($i);
-      $episode->setSynopsis($fake->text(150));
+      $episode->setTitle($faker->text(25));
       $episode->setSeason($this->getReference('season1_Arcane'));
+      $episode->setSynopsis($faker->text(150));
       //... set other episode's properties
       //... create 2 more episodes
       $manager->persist($episode);
