@@ -8,7 +8,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 #[ORM\Entity(repositoryClass: ProgramRepository::class)]
+#[UniqueEntity('title', message: "Ce titre existe déjà")]
 class Program
 {
     #[ORM\Id]
@@ -17,9 +21,12 @@ class Program
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le champ title ne doit pas être est vide")]
+
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: "Le champ synopsis ne doit pas être est vide")]
     private ?string $synopsis = null;
 
     #[ORM\Column(length: 255)]
@@ -123,6 +130,7 @@ class Program
     /**
      * @return Collection<int, Season>
      */
+
     public function getSeasons(): Collection
     {
         return $this->seasons;
