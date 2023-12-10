@@ -14,7 +14,7 @@ class Episode
     #[ORM\Column]
     private ?int $id = null;
 
-        #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255)]
     private ?string $title = null;
 
     #[ORM\Column]
@@ -72,7 +72,7 @@ class Episode
         return $this->season;
     }
 
-    public function setSeason(?Season $season): static
+    public function setSeason(?Season $season): self
     {
         $this->season = $season;
 
