@@ -33,6 +33,8 @@ class SeasonController extends AbstractController
             $entityManager->persist($season);
             $entityManager->flush();
 
+            $this->addFlash("success", "The new season has been created");
+
             return $this->redirectToRoute('app_season_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -58,6 +60,8 @@ class SeasonController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+
+            $this->addFlash("success", "The new category has been created");
 
             return $this->redirectToRoute('app_season_index', [], Response::HTTP_SEE_OTHER);
         }

@@ -57,7 +57,10 @@ class EpisodeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($episode);
             $entityManager->flush();
+
+            $this->addFlash("success", "The new episode has been created");
 
             return $this->redirectToRoute('app_episode_index', [], Response::HTTP_SEE_OTHER);
         }
