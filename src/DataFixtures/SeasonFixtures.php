@@ -22,23 +22,22 @@ class SeasonFixtures extends Fixture implements DependentFixtureInterface
         * de te générer toutes les données que tu souhaites
         */
 
-        for($i = 0; $i <= 5; $i++) {
-            $season = new Season();
-            //Ce Faker va nous permettre d'alimenter l'instance de Season que l'on souhaite ajouter en base
-            $season->setNumber($i);
-            $season->setProgram($this->getReference('program_Arcane'));
-            $season->setYear('2021');
-            $season->setDescription('Saison 1');
-            //... set other season's properties
-            $this->setReference('season1_Arcane', $season);
-            $manager->persist($season);
-
-
-            $manager->persist($season);
+        foreach (ProgramFixtures::PROGRAMS as $programDetails) {
+            for($seasonNumber = 1; $seasonNumber <= 5; $seasonNumber++) {
+                $season = new Season();
+                //Ce Faker va nous permettre d'alimenter l'instance de Season que l'on souhaite ajouter en base
+                $season->setNumber($seasonNumber);
+                $season->setProgram($this->getReference('program_' . $programDetails['title']));
+                $season->setYear($faker->year());
+                $season->setDescription($faker->text(150));
+                //... set other season's properties
+                $manager->persist($season);
+                $this->addReference('program_' . $programDetails['title'] . 'season_' . $seasonNumber, $season);
+            }
+            $manager->flush();
+            }
         }
-
-        $manager->flush();
-    }
+    
 
 
     public function getDependencies(): array
