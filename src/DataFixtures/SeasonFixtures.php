@@ -14,6 +14,7 @@ class SeasonFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
+        
         //Puis ici nous demandons à la Factory de nous fournir un Faker
         $faker = Factory::create();
 
@@ -21,23 +22,21 @@ class SeasonFixtures extends Fixture implements DependentFixtureInterface
         * L'objet $faker que tu récupère est l'outil qui va te permettre 
         * de te générer toutes les données que tu souhaites
         */
-
-        for($i =1; $i <= 5; $i++) {
+    //pour chaque programe, on ajoute de 1 à 5 saison
+    foreach (ProgramFixtures::PROGRAMS as $programDetails) {
+        for($seasonNumber = 1; $seasonNumber <= 5; $seasonNumber++) {
             $season = new Season();
             //Ce Faker va nous permettre d'alimenter l'instance de Season que l'on souhaite ajouter en base
-            $season->setNumber($i);
-            $season->setProgram($this->getReference('program_Arcane'));
-            $season->setYear('2021');
-            $season->setDescription('Première saison de Arcane');
+            $season->setNumber($seasonNumber);
+            $season->setProgram($this->getReference('program_' . $programDetails['title']));
+            $season->setYear($faker->year());
+            $season->setDescription($faker->text(150));
             //... set other season's properties
-            $this->setReference('season1_Arcane', $season);
             $manager->persist($season);
-
-
-            $manager->persist($season);
+            $this->addReference('program_' . $programDetails['title'] . 'season_' . $seasonNumber, $season);
         }
-
         $manager->flush();
+        }
     }
 
 
