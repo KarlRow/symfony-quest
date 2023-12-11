@@ -47,7 +47,7 @@ class ProgramController extends AbstractController
         ]);
     }
 
-    #[Route('/program/show/{id}',  methods: ['GET'], name: 'program_show')]
+    #[Route('/program/{program}',  methods: ['GET'], name: 'program_show')]
     public function show(Program $program): Response
     {
         $seasons = $program->getSeasons();
@@ -55,7 +55,7 @@ class ProgramController extends AbstractController
         return $this->render('program/show.html.twig', ['program' => $program, 'seasons' => $seasons]);
     }
 
-    #[Route('/program/{program}/seasons/{season}', methods: ['GET'], name: 'program_season_show')]
+    #[Route('/program/{program}/season/{season}', methods: ['GET'], name: 'program_season_show')]
     public function showSeason(Program $program, Season $season) : Response
     {
 
