@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: ProgramRepository::class)]
-#[UniqueEntity('title', message: "Ce titre existe déjà")]
+
 class Program
 {
     #[ORM\Id]
@@ -21,7 +21,9 @@ class Program
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[UniqueEntity(message: "Ce titre existe déjà")]
     #[Assert\NotBlank(message: "Le champ title ne doit pas être est vide")]
+    #[Assert\Length(max:255, maxMessage:"Le titre doit faire moins de 255 caractères")]
 
     private ?string $title = null;
 

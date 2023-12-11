@@ -33,7 +33,7 @@ class ProgramController extends AbstractController
         $form = $this->createForm(ProgramType::class, $program);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($program);
             $entityManager->flush();            
 
@@ -47,15 +47,15 @@ class ProgramController extends AbstractController
         ]);
     }
 
-    #[Route('/program/show/{id}',  methods: ['GET'], name: 'program_show')]
+    #[Route('/program/{program}',  methods: ['GET'], name: 'program_show')]
     public function show(Program $program): Response
     {
-        $seasons = $program->getSeasons();
         
-        return $this->render('program/show.html.twig', ['program' => $program, 'seasons' => $seasons]);
+        return $this->render('program/show.html.twig', ['program' => $program]);
     }
 
-    #[Route('/program/{program}/seasons/{season}', methods: ['GET'], name: 'program_season_show')]
+
+    #[Route('/program/{program}/season/{season}', methods: ['GET'], name: 'program_season_show')]
     public function showSeason(Program $program, Season $season) : Response
     {
 
