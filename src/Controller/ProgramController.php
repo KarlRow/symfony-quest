@@ -16,6 +16,7 @@ use App\Repository\ProgramRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 
+
 class ProgramController extends AbstractController
 {
     #[Route('/program/', name: 'program_index')]
@@ -29,7 +30,10 @@ class ProgramController extends AbstractController
     #[Route('/program/new', name: 'new')]
     public function new(Request $request, EntityManagerInterface $entityManager) : Response
     {
+        
         $program = new Program();
+     
+
         $form = $this->createForm(ProgramType::class, $program);
         $form->handleRequest($request);
 
@@ -42,7 +46,7 @@ class ProgramController extends AbstractController
             // Redirect to categories list
             return $this->redirectToRoute('program_index');
         } 
-        
+
         // Render the form
         return $this->render('program/new.html.twig', [
             'form' => $form,
