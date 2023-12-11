@@ -11,9 +11,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-
 #[ORM\Entity(repositoryClass: ProgramRepository::class)]
 #[UniqueEntity('title', message: "Ce titre existe déjà")]
+
 class Program
 {
     #[ORM\Id]
@@ -23,6 +23,7 @@ class Program
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le champ title ne doit pas être est vide")]
+    #[Assert\Length(max:255, maxMessage:"Le titre doit faire moins de 255 caractères")]
 
     private ?string $title = null;
 
@@ -45,9 +46,6 @@ class Program
 
     #[ORM\OneToMany(mappedBy: 'program', targetEntity: Season::class)]
     private Collection $seasons;
-
-    #[ORM\Column(length: 255)]
-    private ?string $slug = null;
 
     public function __construct()
     {
@@ -158,18 +156,6 @@ class Program
                 $season->setProgram(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(string $slug): static
-    {
-        $this->slug = $slug;
 
         return $this;
     }
