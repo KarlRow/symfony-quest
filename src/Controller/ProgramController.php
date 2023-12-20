@@ -16,6 +16,7 @@ use App\Repository\ProgramRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 
+
 class ProgramController extends AbstractController
 {
     #[Route('/program/', name: 'program_index')]
@@ -29,7 +30,10 @@ class ProgramController extends AbstractController
     #[Route('/program/new', name: 'new')]
     public function new(Request $request, EntityManagerInterface $entityManager) : Response
     {
+        
         $program = new Program();
+     
+
         $form = $this->createForm(ProgramType::class, $program);
         $form->handleRequest($request);
 
@@ -42,22 +46,21 @@ class ProgramController extends AbstractController
             // Redirect to categories list
             return $this->redirectToRoute('program_index');
         } 
-        
+
         // Render the form
         return $this->render('program/new.html.twig', [
             'form' => $form,
         ]);
     }
 
-    #[Route('/program/show/{id}',  methods: ['GET'], name: 'program_show')]
+    #[Route('/program/{program}',  methods: ['GET'], name: 'program_show')]
     public function show(Program $program): Response
     {
-        $seasons = $program->getSeasons();
         
-        return $this->render('program/show.html.twig', ['program' => $program, 'seasons' => $seasons]);
+        return $this->render('program/show.html.twig', ['program' => $program]);
     }
 
-    #[Route('/program/{program}/seasons/{season}', methods: ['GET'], name: 'program_season_show')]
+    #[Route('/program/{program}/season/{season}', methods: ['GET'], name: 'program_season_show')]
     public function showSeason(Program $program, Season $season) : Response
     {
 

@@ -13,6 +13,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: ProgramRepository::class)]
 #[UniqueEntity('title', message: "Ce titre existe déjà")]
+
 class Program
 {
     #[ORM\Id]
@@ -22,6 +23,7 @@ class Program
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le champ title ne doit pas être est vide")]
+    #[Assert\Length(max:255, maxMessage:"Le titre doit faire moins de 255 caractères")]
 
     private ?string $title = null;
 
@@ -35,6 +37,9 @@ class Program
     #[ORM\ManyToOne(inversedBy: 'programs')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
+
+    #[ORM\ManyToMany(targetEntity:Actor::class, mappedBy: 'programs')]
+    private Collection $actors;
 
     #[ORM\Column(length: 255)]
     private ?string $country = null;
@@ -157,4 +162,32 @@ class Program
 
         return $this;
     }
+
+    /**
+    * @return Collection<int, Actor>
+    */
+    public function getActors(): Collection
+    {
+        return $this->actors;
+    }
+
+    public function addActor(Actor $actor): static
+    {
+        if (!$this->actors->contains($actor)) {
+            $this->actors->add($actor);
+            $actor->addProgram($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActor(Actor $actor): static
+    {
+        if ($this->actors->removeElement($actor)) {
+            $actor->removeProgram($this);
+            }
+
+        return $this;
+    }
+    
 }

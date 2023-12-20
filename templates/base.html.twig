@@ -19,8 +19,7 @@
             {% include '/_navbar.html.twig' %}
         {% endblock %}
         
-        {% block body %}
-        {% for category, messages in dump(app.flashes) %}
+        {% for category, messages in app.flashes %}
             {% for message in messages %}
                 <div class="alert alert-{{ category }}">
                     {{ message }}
@@ -34,8 +33,9 @@
                     {{ message }}
                 </div>
                 {% endfor %}
+
         {% endfor %}
-        
+        {% block body %}
         {% endblock %}
     </body>
 </html>
