@@ -2,9 +2,12 @@
 
 {% extends "base.html.twig" %}
 
+{% block stylesheet %}{% endblock %}
+
 {% block body %}
+
         {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
         {{ form_widget(form) }}
-            <button type="submit" class="btn btn-primary">Add program</button>
+            <button type="submit" class="btn btn-primary">Save program</button>
         {{ form_end(form) }}
 {% endblock %}
