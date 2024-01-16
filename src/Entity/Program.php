@@ -50,6 +50,9 @@ class Program
     #[ORM\OneToMany(mappedBy: 'program', targetEntity: Season::class)]
     private Collection $seasons;
 
+    #[ORM\Column(length: 255)]
+    private ?string $slug = null;
+
     public function __construct()
     {
         $this->seasons = new ArrayCollection();
@@ -167,6 +170,7 @@ class Program
     /**
     * @return Collection<int, Actor>
     */
+
     public function getActors(): Collection
     {
         return $this->actors;
@@ -187,6 +191,18 @@ class Program
         if ($this->actors->removeElement($actor)) {
             $actor->removeProgram($this);
             }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
 
         return $this;
     }

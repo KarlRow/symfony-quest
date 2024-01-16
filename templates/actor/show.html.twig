@@ -9,8 +9,7 @@
                 {% for program in actor.programs %}
                 <div>
                     <div>Série {{ program.title }}</div>
-                    <div><a href="{{ path("program_show", { 'program': program.id }) }}">Voir la série</a></div>
-                    {# <a href="{{ path("program_season_show", { 'program': program.id, 'season' : season.id}) }}">Voir la saison</a> #}
+                    <div><a href="{{ path("program_show", { 'slug': program.slug }) }}">Voir la série</a></div>
                 </div>
             {% else %}
                 Aucune série trouvée.

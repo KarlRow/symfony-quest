@@ -18,7 +18,7 @@ class Episode
     private ?string $title = null;
 
     #[ORM\Column]
-    private ?int $number = null;
+    private ?string $number = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $synopsis = null;
@@ -26,6 +26,12 @@ class Episode
     #[ORM\ManyToOne(inversedBy: 'episodes')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Season $season = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $slug = null;
+
+    #[ORM\Column(length: 255)]
+    private ?int $duration;
 
     public function getId(): ?int
     {
@@ -75,6 +81,30 @@ class Episode
     public function setSeason(?Season $season): self
     {
         $this->season = $season;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getDuration(): ?int
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(int $duration): static
+    {
+        $this->duration = $duration;
 
         return $this;
     }
