@@ -2,6 +2,7 @@
 // src/Controller/ProgramController.php
 namespace App\Controller;
 
+use App\Entity\Category;
 use App\Entity\Episode;
 use App\Entity\Program;
 use App\Entity\Season;
@@ -39,10 +40,13 @@ class ProgramController extends AbstractController
         $form = $this->createForm(ProgramType::class, $program);
         $form->handleRequest($request);
 
-        $slug = $slugger->slug($program->getTitle() !== null);
-        $program->setSlug($slug);
-
         if ($form->isSubmitted() && $form->isValid()) {
+
+            if($program->getTitle() !== null) {
+                $slug = $slugger->slug($program->getTitle());
+                $program->setSlug($slug);
+            }
+
             $entityManager->persist($program);
             $entityManager->flush(); 
             
@@ -120,38 +124,16 @@ class ProgramController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_program_delete', methods: ['POST'])]
-    public function delete(Request $request, Program $program, Season $season, EntityManagerInterface $entityManager): Response
+    #[Route('{id}', name: 'app_program_delete', methods: ['POST'])]
+    public function delete(Request $request, Program $program, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $program->getId(), $request->request->get('_token'))) {
-            // Récupérer les saisons liées directement à partir de l'EntityManager
-            $seasons = $entityManager->getRepository(Season::class)->findBy(['program' => $program->getId()]);
-    
-            foreach ($seasons as $season) {
-                // Récupérer les épisodes liés directement à partir de l'EntityManager
-                $episodes = $entityManager->getRepository(Episode::class)->findBy(['season' => $season->getId()]);
-    
-                if (!empty($episodes)) {
-                    // Supprimer manuellement les enregistrements liés dans la table "episode"
-                    foreach ($episodes as $episode) {
-                        $entityManager->remove($episode);
-                    }
-    
-                    $entityManager->flush();
-                }
-    
-                // Supprimer l'enregistrement dans la table "season"
-                $entityManager->remove($season);
-                $entityManager->flush();
-            }
-    
-            // Supprimer l'enregistrement dans la table "program"
             $entityManager->remove($program);
             $entityManager->flush();
-    
-            $this->addFlash('danger', 'Le programme a bien été supprimé !');
+
+            $this->addFlash('danger', 'La série a bien été supprimé !');
         }
-    
+
         return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
     }
 }

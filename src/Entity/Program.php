@@ -61,7 +61,7 @@ class Program
     #[ORM\Column]
     private ?int $year = null;
 
-    #[ORM\OneToMany(mappedBy: 'program', targetEntity: Season::class)]
+    #[ORM\OneToMany(mappedBy: 'program', targetEntity: Season::class, orphanRemoval:true)]
     private Collection $seasons;
 
     #[ORM\Column(length: 255)]
