@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-use Symfony\Component\String\Slugger\SluggerInterface;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 
 
 class ProgramType extends AbstractType
@@ -24,6 +24,11 @@ class ProgramType extends AbstractType
             ->add('country')
             ->add('year')
             ->add('category', EntityType::class, ['class' => Category::class, 'choice_label' => 'name'])
+            ->add('posterFile', VichFileType::class, [
+                'required' => false,
+                'allow_delete' => true,
+                'download_uri' => true,
+            ])
         ;
         $builder->add('actors', EntityType::class, [
                 'class' => Actor::class,
