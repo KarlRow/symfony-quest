@@ -121,16 +121,38 @@ class ProgramController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_program_delete', methods: ['POST'])]
-    public function delete(Request $request, Program $program, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Program $program, Season $season, EntityManagerInterface $entityManager): Response
     {
-        $poster = $program->getPoster();
-
-        if ($this->isCsrfTokenValid('delete'.$program->getId(), $request->request->get('_token'))) {
-
-                $entityManager->remove($program);
+        if ($this->isCsrfTokenValid('delete' . $program->getId(), $request->request->get('_token'))) {
+            // Récupérer les saisons liées directement à partir de l'EntityManager
+            $seasons = $entityManager->getRepository(Season::class)->findBy(['program' => $program->getId()]);
+    
+            foreach ($seasons as $season) {
+                // Récupérer les épisodes liés directement à partir de l'EntityManager
+                $episodes = $entityManager->getRepository(Episode::class)->findBy(['season' => $season->getId()]);
+    
+                if (!empty($episodes)) {
+                    // Supprimer manuellement les enregistrements liés dans la table "episode"
+                    foreach ($episodes as $episode) {
+                        $entityManager->remove($episode);
+                    }
+    
+                    $entityManager->flush();
+                }
+    
+                // Supprimer l'enregistrement dans la table "season"
+                $entityManager->remove($season);
                 $entityManager->flush();
-                $this->addFlash('danger', 'Le program a bien été supprimé !');  
+            }
+    
+            // Supprimer l'enregistrement dans la table "program"
+            $entityManager->remove($program);
+            $entityManager->flush();
+    
+            $this->addFlash('danger', 'Le programme a bien été supprimé !');
         }
+    
         return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
     }
 }
+
